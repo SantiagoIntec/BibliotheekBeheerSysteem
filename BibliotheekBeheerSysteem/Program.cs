@@ -108,22 +108,23 @@ namespace BibliotheekBeheerSysteem
             string textVerwijderd;
             int index;
             bool result;
-            Console.WriteLine("Lenen een boek: ");
-            Console.SetCursorPosition(21, 8);
+            
+            Console.WriteLine("Lenen een materiaal: ");
+            Console.SetCursorPosition(5, 10);
             Console.WriteLine("BoekTitels");
 
-            Console.SetCursorPosition(56, 8);
+            Console.SetCursorPosition(50, 10);
             Console.WriteLine("TijdschriftNamen");
 
             for (int i = 0; i < boekTitels.Length; i++)
             {
-                Console.SetCursorPosition(21, 10 + i);
+                Console.SetCursorPosition(5, 12 + i);
                 Console.WriteLine($" ({i}) {boekTitels[i]}");
 
                 for (int j = 0; j < tijdschriftNamen.Length; j++)
                 {
 
-                    Console.SetCursorPosition(56, 10 + j);
+                    Console.SetCursorPosition(5, 12 + j);
                     Console.WriteLine($" ({tijdschriftNamen.Length + j}) {tijdschriftNamen[j]}");
                 }
 
