@@ -14,80 +14,13 @@ namespace BibliotheekBeheerSysteem
             string[] boekAuteurs = new string[] { "Cal Newportk", "Homero", "Jamie Chan" };
             string[] tijdschriftNamen = new string[] { "Paris Match", "Fashion", "Technology Magazine" };
             string[] gebruikers = new string[] { "Administrator", "User", "Guess" };
-            string[] lenenBoek = new string[] {};
-            string[] lenentijdschriftNamen = new string[] {};
-            string[] buffer;
-            ConsoleKeyInfo keyinfo;
+            string[] lenenBoek = new string[] { };
+            string[] lenentijdschriftNamen = new string[] { };
 
 
             ShowMenu(ref boekTitels, ref boekAuteurs, ref tijdschriftNamen, ref gebruikers, ref lenenBoek, ref lenentijdschriftNamen);
 
-            //string verwijderd;
-            //string textVerwijderd;
-            //int index;
-            //bool result;
-            //Console.WriteLine("Terugbrengen een materieel: ");
-            //Console.SetCursorPosition(5, 8);
-            //Console.WriteLine("BoekTitels");
-
-            //Console.SetCursorPosition(50, 8);
-            //Console.WriteLine("TijdschriftNamen");
-
-            //for (int i = 0; i < boekTitels.Length; i++)
-            //{
-            //    Console.SetCursorPosition(5, 10 + i);
-            //    Console.WriteLine($" ({i}) {boekTitels[i]}");
-
-            //    for (int j = 0; j < tijdschriftNamen.Length; j++)
-            //    {
-
-            //        Console.SetCursorPosition(50, 10 + j);
-            //        Console.WriteLine($" ({tijdschriftNamen.Length + j}) {tijdschriftNamen[j]}");
-            //    }
-
-            //}
-            //Console.Write($"\n Voer het nummer in dat overeenkomt met de mateiral die je wilt opnemen. ==>  ");
-            //verwijderd = Console.ReadLine();
-
-            //if (int.Parse(verwijderd) < (tijdschriftNamen.Length + boekTitels.Length))
-            //{
-            //    if (int.Parse(verwijderd) >= boekTitels.Length)
-            //    {
-            //        index = int.Parse(verwijderd) - tijdschriftNamen.Length;
-            //        textVerwijderd = tijdschriftNamen[index];
-
-            //        // add the material selected to lenen book
-            //        Array.Resize(ref lenenBoek, lenenBoek.Length + 1);
-            //        lenenBoek.SetValue(textVerwijderd, lenenBoek.Length - 1);
-            //        Console.WriteLine(lenenBoek[0]);
-            //        // add the material selected to lenen book
-
-            //        tijdschriftNamen = tijdschriftNamen.Where(val => val != textVerwijderd).ToArray();
-            //        Console.WriteLine($"\n het materiaal geleend: {textVerwijderd}");
-            //        Console.ReadLine();
-            //    }
-            //    else
-            //    {
-            //        index = int.Parse(verwijderd);
-            //        textVerwijderd = boekTitels[index];
-
-            //        // add the material selected to lenen book
-            //        Array.Resize(ref lenenBoek, lenenBoek.Length + 1);
-            //        lenenBoek.SetValue(textVerwijderd, lenenBoek.Length - 1);
-            //        Console.WriteLine(lenenBoek[0]);
-            //        Console.ReadLine();
-            //        // add the material selected to lenen book
-
-            //        boekTitels = boekTitels.Where(val => val != textVerwijderd).ToArray();
-            //        Console.WriteLine($"\n het materiaal geleend: {textVerwijderd}");
-            //        Console.ReadLine();
-            //    }
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Voer een geldig nummer in, probeer opnieuw!!!!");
-            //    Console.ReadLine();
-            //}
+            //TerugbrengenMateriaal(ref boekTitels, ref tijdschriftNamen, ref lenenBoek, ref lenentijdschriftNamen);
 
 
             //LenenBoek(ref boekTitels, ref tijdschriftNamen, ref lenenBoek);
@@ -102,18 +35,96 @@ namespace BibliotheekBeheerSysteem
 
         }
 
-        private static void LenenBoek(ref string[] boekTitels, ref string[] tijdschriftNamen, ref string[] lenenBoek, ref string[] lenentijdschriftNamen)
+        private static void TerugbrengenMateriaal(ref string[] boekTitels, ref string[] tijdschriftNamen, ref string[] lenenBoek, ref string[] lenentijdschriftNamen)
         {
             string verwijderd;
             string textVerwijderd;
             int index;
+      
+
+            Console.SetCursorPosition(25, 10);
+            Console.WriteLine($"Een materiaal terugbrengen");
+            Console.SetCursorPosition(5, 11);
+            Console.WriteLine("Lenen BoekTitels");
+
+            Console.SetCursorPosition(50, 11);
+            Console.WriteLine("Lenen TijdschriftNamen");
+
+            for (int i = 0; i <= lenenBoek.Length; i++)
+            {
+                Console.SetCursorPosition(5, 12 + i);
+                if (lenenBoek.Count() == 0) { Console.WriteLine(""); }
+                else { Console.WriteLine($" ({i}) {lenenBoek[i]}"); }
+
+                for (int j = 0; j < lenentijdschriftNamen.Length; j++)
+                {
+                    Console.SetCursorPosition(50, 12 + j);
+                    Console.WriteLine($" ({lenentijdschriftNamen.Length + j}) {lenentijdschriftNamen[j]}");
+                }
+
+            }
+            Console.Write($"\n Voer het nummer in dat overeenkomt met de mateiral die je wilt opnemen. ==>  ");
+            verwijderd = Console.ReadLine();
+
+            if (int.Parse(verwijderd) <= (lenentijdschriftNamen.Length + lenenBoek.Length))
+            {
+                if (int.Parse(verwijderd) > lenentijdschriftNamen.Length || lenenBoek.Count() == 0)
+                {
+                    if (lenentijdschriftNamen.Count() == 0)
+                    {
+                        index = 0;
+                    }
+                    else
+                    {
+                        index = int.Parse(verwijderd) - lenentijdschriftNamen.Length;
+                    }
+                    
+                    textVerwijderd = lenentijdschriftNamen[index];
+
+                    // add the material selected to tijdschriftNamen
+                    Array.Resize(ref tijdschriftNamen, tijdschriftNamen.Length + 1);
+                    tijdschriftNamen.SetValue(textVerwijderd, tijdschriftNamen.Length - 1);
+                    // delete the material selected from lenentijdschriftNamen
+                    lenentijdschriftNamen = lenentijdschriftNamen.Where(val => val != textVerwijderd).ToArray();
+                    Console.WriteLine($"\n het materiaal geleend: {textVerwijderd}");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    index = int.Parse(verwijderd);
+                    textVerwijderd = lenenBoek[index];
+
+                    // add the material selected to lenen book
+                    Array.Resize(ref boekTitels, boekTitels.Length + 1);
+                    boekTitels.SetValue(textVerwijderd, boekTitels.Length - 1);
+                    Console.ReadLine();
+                    // add the material selected to lenen book
+
+                    lenenBoek = lenenBoek.Where(val => val != textVerwijderd).ToArray();
+                    Console.WriteLine($"\n het materiaal geleend: {textVerwijderd}");
+                    Console.ReadLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Voer een geldig nummer in, probeer opnieuw!!!!");
+                Console.ReadLine();
+            }
+        }
+
+        private static void LenenBoek(ref string[] boekTitels, ref string[] tijdschriftNamen, ref string[] lenenBoek, ref string[] lenentijdschriftNamen)
+        {
+            string verwijderd;
+            string textLenen;
+            int index;
             bool result;
-            
-            Console.WriteLine("Lenen een materiaal: ");
-            Console.SetCursorPosition(5, 10);
+
+            Console.SetCursorPosition(25, 10);
+            Console.WriteLine($"Lenen een materiaal");
+            Console.SetCursorPosition(5, 11);
             Console.WriteLine("BoekTitels");
 
-            Console.SetCursorPosition(50, 10);
+            Console.SetCursorPosition(50, 11);
             Console.WriteLine("TijdschriftNamen");
 
             for (int i = 0; i < boekTitels.Length; i++)
@@ -124,7 +135,7 @@ namespace BibliotheekBeheerSysteem
                 for (int j = 0; j < tijdschriftNamen.Length; j++)
                 {
 
-                    Console.SetCursorPosition(5, 12 + j);
+                    Console.SetCursorPosition(50, 12 + j);
                     Console.WriteLine($" ({tijdschriftNamen.Length + j}) {tijdschriftNamen[j]}");
                 }
 
@@ -132,37 +143,35 @@ namespace BibliotheekBeheerSysteem
             Console.Write($"\n Voer het nummer in dat overeenkomt met de mateiral die je wilt opnemen. ==>  ");
             verwijderd = Console.ReadLine();
 
-            if (int.Parse(verwijderd) < (tijdschriftNamen.Length + boekTitels.Length))
+            if (int.Parse(verwijderd) <= (tijdschriftNamen.Length + boekTitels.Length))
             {
                 if (int.Parse(verwijderd) >= boekTitels.Length)
                 {
                     index = int.Parse(verwijderd) - tijdschriftNamen.Length;
-                    textVerwijderd = tijdschriftNamen[index];
+                    textLenen = tijdschriftNamen[index];
 
-                    // add the material selected to lenen book
+                    // add the material selected to lenentijdschriftNamen
                     Array.Resize(ref lenentijdschriftNamen, lenentijdschriftNamen.Length + 1);
-                    lenentijdschriftNamen.SetValue(textVerwijderd, lenentijdschriftNamen.Length - 1);
-                    Console.WriteLine(lenentijdschriftNamen[0]);
-                    // add the material selected to lenen book
-                    tijdschriftNamen = tijdschriftNamen.Where(val => val != textVerwijderd).ToArray();
-                    Console.WriteLine($"\n het materiaal geleend: {textVerwijderd}");
-                    Console.ReadLine();
+                    lenentijdschriftNamen.SetValue(textLenen, lenentijdschriftNamen.Length - 1);
+                    // delete the material from tijdschriftNamen
+                    tijdschriftNamen = tijdschriftNamen.Where(val => val != textLenen).ToArray();
+                    Console.WriteLine($"\n het materiaal geleend: {textLenen}");
+                    
                 }
                 else
                 {
                     index = int.Parse(verwijderd);
-                    textVerwijderd = boekTitels[index];
+                    textLenen = boekTitels[index];
 
                     // add the material selected to lenen book
                     Array.Resize(ref lenenBoek, lenenBoek.Length + 1);
-                    lenenBoek.SetValue(textVerwijderd, lenenBoek.Length - 1);
-                    Console.WriteLine(lenenBoek[0]);
+                    lenenBoek.SetValue(textLenen, lenenBoek.Length - 1);                    
                     Console.ReadLine();
                     // add the material selected to lenen book
 
-                    boekTitels = boekTitels.Where(val => val != textVerwijderd).ToArray();
-                    Console.WriteLine($"\n het materiaal geleend: {textVerwijderd}");
-                    Console.ReadLine();
+                    boekTitels = boekTitels.Where(val => val != textLenen).ToArray();
+                    Console.WriteLine($"\n het materiaal geleend: {textLenen}");
+                    
                 }
             }
             else
@@ -211,21 +220,21 @@ namespace BibliotheekBeheerSysteem
             string textVerwijderd;
             int index;
             bool result;
-            Console.SetCursorPosition(5, 8);
+            Console.SetCursorPosition(5, 11);
             Console.WriteLine("BoekTitels");
 
-            Console.SetCursorPosition(50, 8);
+            Console.SetCursorPosition(50, 11);
             Console.WriteLine("TijdschriftNamen");
 
             for (int i = 0; i < boekTitels.Length; i++)
             {
-                Console.SetCursorPosition(5, 10 + i);
+                Console.SetCursorPosition(5, 12 + i);
                 Console.WriteLine($" ({i}) {boekTitels[i]}");
 
                 for (int j = 0; j < tijdschriftNamen.Length; j++)
                 {
 
-                    Console.SetCursorPosition(50, 10 + j);
+                    Console.SetCursorPosition(50, 12 + j);
                     Console.WriteLine($" ({tijdschriftNamen.Length + j}) {tijdschriftNamen[j]}");
                 }
 
@@ -233,7 +242,7 @@ namespace BibliotheekBeheerSysteem
             Console.Write($"\n Voer het nummer in dat overeenkomt met de mateiral die verwijderd moet worden ==>  ");
             verwijderd = Console.ReadLine();
 
-            if (int.Parse(verwijderd) < (tijdschriftNamen.Length + boekTitels.Length))
+            if (int.Parse(verwijderd) <= (tijdschriftNamen.Length + boekTitels.Length))
             {
                 if (int.Parse(verwijderd) >= boekTitels.Length)
                 {
@@ -297,21 +306,21 @@ namespace BibliotheekBeheerSysteem
         private static void ToonMaterialen(string[] boekTitels, string[] tijdschriftNamen)
         {
 
-            Console.SetCursorPosition(5, 8);
+            Console.SetCursorPosition(5, 11);
             Console.WriteLine($"boekTitels");
 
-            Console.SetCursorPosition(50, 8);
+            Console.SetCursorPosition(50, 11);
             Console.WriteLine($"tijdschriftNamen");
 
             for (int i = 0; i < boekTitels.Length; i++)
             {
-                Console.SetCursorPosition(5, 10 + i);
+                Console.SetCursorPosition(5, 13 + i);
                 Console.WriteLine(boekTitels[i]);
 
                 for (int j = 0; j < tijdschriftNamen.Length; j++)
                 {
                      
-                    Console.SetCursorPosition(50, 10 + j);
+                    Console.SetCursorPosition(50, 13 + j);
                     Console.WriteLine(tijdschriftNamen[j]);
                     //break;
                 }
@@ -370,8 +379,8 @@ namespace BibliotheekBeheerSysteem
                         EndCase();
                         break;
                     case 6:
-                        //LenenBoek(ref boekTitels, ref tijdschriftNamen, ref lenenBoek);
-                        //EndCase();
+                        TerugbrengenMateriaal(ref boekTitels, ref tijdschriftNamen, ref lenenBoek, ref lenentijdschriftNamen);
+                        EndCase();
                         break;
 
                     case 7:
