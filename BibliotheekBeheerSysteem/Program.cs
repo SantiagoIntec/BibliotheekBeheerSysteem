@@ -49,17 +49,27 @@ namespace BibliotheekBeheerSysteem
 
             Console.SetCursorPosition(50, 11);
             Console.WriteLine("Lenen TijdschriftNamen");
+            int itemsLenenboek = lenenBoek.Length;
+            int itemsTijdschr = lenentijdschriftNamen.Length;
+            if (itemsTijdschr > itemsLenenboek) { itemsLenenboek = itemsTijdschr; }
 
-            for (int i = 0; i <= lenenBoek.Length; i++)
+            //for (int i = 0; i < lenenBoek.Length; i++)
+            for (int i = 0; i < itemsLenenboek; i++)
             {
                 Console.SetCursorPosition(5, 12 + i);
                 if (lenenBoek.Count() == 0) { Console.WriteLine(""); }
                 else { Console.WriteLine($" ({i}) {lenenBoek[i]}"); }
 
-                for (int j = 0; j < lenentijdschriftNamen.Length; j++)
+                //for (int j = 0; j < lenentijdschriftNamen.Length; j++)
+                for (int j = 0; j < itemsTijdschr; j++)
                 {
                     Console.SetCursorPosition(50, 12 + j);
-                    Console.WriteLine($" ({lenentijdschriftNamen.Length + j}) {lenentijdschriftNamen[j]}");
+                    if (lenentijdschriftNamen.Count() == 0) { Console.WriteLine(""); }
+                    else
+                    {
+                        //Console.WriteLine($" ({lenentijdschriftNamen.Length + j}) {lenentijdschriftNamen[j]}");
+                        Console.WriteLine($" ({itemsTijdschr + j}) {lenentijdschriftNamen[j]}");
+                    }
                 }
 
             }
