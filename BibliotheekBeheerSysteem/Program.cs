@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,38 +10,46 @@ namespace BibliotheekBeheerSysteem
 {
     internal class Program 
     {
+
         static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             string[] boekTitels = new string[] { "Deep work", "Odisea", "Learn C# in One Day and Learn It Well" };
             string[] boekAuteurs = new string[] { "Cal Newportk", "Homero", "Jamie Chan" };
             string[] tijdschriftNamen = new string[] { "Paris Match", "Fashion", "Technology Magazine" };
             string[] gebruikers = new string[] { "Administrator", "User", "Guess" };
             string[] lenenBoek = new string[] { };
             string[] lenentijdschriftNamen = new string[] { };
+            Boolean logged = false;
+            string user ="";             
 
-
-            ShowMenu(ref boekTitels, ref boekAuteurs, ref tijdschriftNamen, ref gebruikers, ref lenenBoek, ref lenentijdschriftNamen);
-
-            //TerugbrengenMateriaal(ref boekTitels, ref tijdschriftNamen, ref lenenBoek, ref lenentijdschriftNamen);
-
-
-            //LenenBoek(ref boekTitels, ref tijdschriftNamen, ref lenenBoek);
-
-
-            //ToonMaterialen(boekTitels, tijdschriftNamen);
-
-
-            //Console.ReadLine();
-
-
+            ShowMenu(ref boekTitels, ref boekAuteurs, ref tijdschriftNamen, ref gebruikers, ref lenenBoek, ref lenentijdschriftNamen, ref logged, ref user);
 
         }
 
-        private static void TerugbrengenMateriaal(ref string[] boekTitels, ref string[] tijdschriftNamen, ref string[] lenenBoek, ref string[] lenentijdschriftNamen)
+        private static string toonMateriaalAllen(string user, string materiaalNaam)
+        {
+            int pos = 0;
+            for (int i = 0; i < materiaalNaam.Length; i++)
+            {
+                if (materiaalNaam[i].ToString() == "+") { pos = i; break; }
+
+
+            }
+
+            String newStr = materiaalNaam.Remove(pos, user.Length + 1);
+            
+            return newStr;
+
+            Console.ReadLine();
+        }
+
+        private static void TerugbrengenMateriaal(ref string[] boekTitels, ref string[] tijdschriftNamen, ref string[] lenenBoek, ref string[] lenentijdschriftNamen, ref string user)
         {
             string verwijderd;
             string textVerwijderd;
             int index;
+            string materiaal;
       
 
             Console.SetCursorPosition(25, 10);
@@ -58,7 +68,11 @@ namespace BibliotheekBeheerSysteem
             {
                 Console.SetCursorPosition(5, 12 + i);
                 if (lenenBoek.Count() == 0) { Console.WriteLine(""); }
-                else { Console.WriteLine($" ({i}) {lenenBoek[i]}"); }
+                else 
+                {
+                    materiaal = toonMateriaalAllen(user, lenenBoek[i]);
+                    Console.WriteLine($" ({i}) {materiaal} uitgeleend aan {user} ");                     
+                }
 
                 //for (int j = 0; j < lenentijdschriftNamen.Length; j++)
                 for (int j = 0; j < itemsTijdschr; j++)
@@ -67,8 +81,8 @@ namespace BibliotheekBeheerSysteem
                     if (lenentijdschriftNamen.Count() == 0) { Console.WriteLine(""); }
                     else
                     {
-                        //Console.WriteLine($" ({lenentijdschriftNamen.Length + j}) {lenentijdschriftNamen[j]}");
-                        Console.WriteLine($" ({itemsTijdschr + j}) {lenentijdschriftNamen[j]}");
+                        materiaal = toonMateriaalAllen(user, lenentijdschriftNamen[j]);
+                        Console.WriteLine($" ({itemsTijdschr + j}) {materiaal} uitgeleend aan {user}");
                     }
                 }
 
@@ -89,14 +103,15 @@ namespace BibliotheekBeheerSysteem
                         index = int.Parse(verwijderd) - lenentijdschriftNamen.Length;
                     }
                     
-                    textVerwijderd = lenentijdschriftNamen[index];
+                    //textVerwijderd = lenentijdschriftNamen[index];
+                    textVerwijderd = toonMateriaalAllen(user, lenentijdschriftNamen[index]);
 
                     // add the material selected to tijdschriftNamen
                     Array.Resize(ref tijdschriftNamen, tijdschriftNamen.Length + 1);
                     tijdschriftNamen.SetValue(textVerwijderd, tijdschriftNamen.Length - 1);
                     // delete the material selected from lenentijdschriftNamen
                     lenentijdschriftNamen = lenentijdschriftNamen.Where(val => val != textVerwijderd).ToArray();
-                    Console.WriteLine($"\n het materiaal geleend: {textVerwijderd}");
+                    Console.WriteLine($"\n het materiaal geleend: {toonMateriaalAllen(user, textVerwijderd)}");
                     Console.ReadLine();
                 }
                 else
@@ -107,11 +122,11 @@ namespace BibliotheekBeheerSysteem
                     // add the material selected to lenen book
                     Array.Resize(ref boekTitels, boekTitels.Length + 1);
                     boekTitels.SetValue(textVerwijderd, boekTitels.Length - 1);
-                    Console.ReadLine();
+                     
                     // add the material selected to lenen book
 
                     lenenBoek = lenenBoek.Where(val => val != textVerwijderd).ToArray();
-                    Console.WriteLine($"\n het materiaal geleend: {textVerwijderd}");
+                    Console.WriteLine($"\n het materiaal geleend: {toonMateriaalAllen(user,textVerwijderd)}");
                     Console.ReadLine();
                 }
             }
@@ -122,13 +137,12 @@ namespace BibliotheekBeheerSysteem
             }
         }
 
-        private static void LenenBoek(ref string[] boekTitels, ref string[] tijdschriftNamen, ref string[] lenenBoek, ref string[] lenentijdschriftNamen)
+        private static void LenenBoek(ref string[] boekTitels, ref string[] tijdschriftNamen, ref string[] lenenBoek, ref string[] lenentijdschriftNamen, ref string  user)
         {
             string verwijderd;
             string textLenen;
             int index;
-            bool result;
-
+            Console.Clear();
             Console.SetCursorPosition(25, 10);
             Console.WriteLine($"Lenen een materiaal");
             Console.SetCursorPosition(5, 11);
@@ -162,7 +176,7 @@ namespace BibliotheekBeheerSysteem
 
                     // add the material selected to lenentijdschriftNamen
                     Array.Resize(ref lenentijdschriftNamen, lenentijdschriftNamen.Length + 1);
-                    lenentijdschriftNamen.SetValue(textLenen, lenentijdschriftNamen.Length - 1);
+                    lenentijdschriftNamen.SetValue(textLenen + "+" + user, lenentijdschriftNamen.Length - 1);
                     // delete the material from tijdschriftNamen
                     tijdschriftNamen = tijdschriftNamen.Where(val => val != textLenen).ToArray();
                     Console.WriteLine($"\n het materiaal geleend: {textLenen}");
@@ -175,8 +189,8 @@ namespace BibliotheekBeheerSysteem
 
                     // add the material selected to lenen book
                     Array.Resize(ref lenenBoek, lenenBoek.Length + 1);
-                    lenenBoek.SetValue(textLenen, lenenBoek.Length - 1);                    
-                    Console.ReadLine();
+                    lenenBoek.SetValue(textLenen + "+" + user, lenenBoek.Length - 1);                    
+                    //Console.ReadLine();
                     // add the material selected to lenen book
 
                     boekTitels = boekTitels.Where(val => val != textLenen).ToArray();
@@ -187,23 +201,28 @@ namespace BibliotheekBeheerSysteem
             else
             {
                 Console.WriteLine("Voer een geldig nummer in, probeer opnieuw!!!!");
-                Console.ReadLine();
+                //Console.ReadLine();
             }
+            Console.ReadLine();
         }
 
-        private static string[] RegistreerGebruiker(string[] gebruikers)
+        private static string[] RegistreerGebruiker(string[] gebruikers, string user)
         {
-            string naam;
-            Console.Write("Voer de naam van de nieuwe gebruiker in: ");
-            naam = Console.ReadLine();
-
-            Array.Resize(ref gebruikers, gebruikers.Length + 1);
-            gebruikers.SetValue(naam, gebruikers.Length - 1);
-
-            for (int i = 0; i < gebruikers.Length; i++)
+            if (!gebruikers.Contains(user))
             {
-                Console.WriteLine(gebruikers[i]);
+                Array.Resize(ref gebruikers, gebruikers.Length + 1);
+                gebruikers.SetValue(user, gebruikers.Length - 1);
+                Console.WriteLine($"Welcome  {user}");
             }
+            else
+            {
+                Console.WriteLine("De gebruiker bestaat al, probeer het opnieuw");
+            }
+
+            //for (int i = 0; i < gebruikers.Length; i++)
+            //{
+            //    Console.WriteLine(gebruikers[i]); 
+            //}
 
             return gebruikers;
         }
@@ -229,7 +248,7 @@ namespace BibliotheekBeheerSysteem
             string verwijderd;
             string textVerwijderd;
             int index;
-            bool result;
+             
             Console.SetCursorPosition(5, 11);
             Console.WriteLine("BoekTitels");
 
@@ -268,14 +287,15 @@ namespace BibliotheekBeheerSysteem
                     textVerwijderd = boekTitels[index];
                     boekTitels = boekTitels.Where(val => val != textVerwijderd).ToArray();
                     Console.WriteLine($"\n het materiaal verwijderd: {textVerwijderd}");
-                    Console.ReadLine();
+                    //Console.ReadLine();
                 }
             }
             else
             {
                 Console.WriteLine("Voer een geldig nummer in, probeer opnieuw!!!!");
-                Console.ReadLine();
+                //Console.ReadLine();
             }
+            Console.ReadLine();
         }
 
         private static void VoegMateriaalToe(ref string[] boekTitels, ref string[] boekAuteurs, ref string[] tijdschriftNamen)
@@ -337,25 +357,35 @@ namespace BibliotheekBeheerSysteem
             }
         }
 
-        private static void ShowMenu(ref string[] boekTitels, ref string[] boekAuteurs, ref string[] tijdschriftNamen, ref string[] gebruikers, ref string[] lenenBoek, ref string[] lenentijdschriftNamen)
+        private static void ShowMenu(ref string[] boekTitels, ref string[] boekAuteurs, ref string[] tijdschriftNamen, ref string[] gebruikers, ref string[] lenenBoek, ref string[] lenentijdschriftNamen, ref Boolean logged, ref string user)
         {
             string option;
             int num;
 
             do
             {
+                if (logged) 
+                { Console.SetCursorPosition(80, 1); 
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($" Gebruiker ==> : {user}");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                }
+                else
+                {
+                    Console.WriteLine($"Menu");
+                }
                 
-                Console.WriteLine("Menu");
                 Console.WriteLine("[0] materialen tonen");
                 Console.WriteLine("[1] materiaal toevoegen");
                 Console.WriteLine("[2] materiaal verwijderen");
-                Console.WriteLine("[3] mmateriaal zoeken");
+                Console.WriteLine("[3] Mmateriaal zoeken");
                 Console.WriteLine("[4] nieuwe gebruiker registreren");
                 Console.WriteLine("[5] Lenen een materiaael");
                 Console.WriteLine("[6] Terugbrengen een materiaal");
                 Console.WriteLine("[7] Exit");
                 Console.Write("Kies een nummer: ");
                 option = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
 
                 if (!Int32.TryParse(option, out num)) continue;
 
@@ -366,9 +396,18 @@ namespace BibliotheekBeheerSysteem
                         EndCase();                        
                         break;
                     case 1:
-                        VoegMateriaalToe(ref boekTitels, ref boekAuteurs, ref tijdschriftNamen);
-                        ToonMaterialen(boekTitels, tijdschriftNamen);
-                        EndCase();
+                        if (!logged)
+                        {
+                            logged = CheckUser(gebruikers, logged, user);
+                        }
+                        else
+                        {
+                            VoegMateriaalToe(ref boekTitels, ref boekAuteurs, ref tijdschriftNamen);
+                            ToonMaterialen(boekTitels, tijdschriftNamen);
+                            EndCase();
+                        }
+
+                        Console.ReadLine();
                         break;
                     case 2:
                         VerwijderMateriaal(ref boekTitels, ref tijdschriftNamen);
@@ -381,16 +420,34 @@ namespace BibliotheekBeheerSysteem
                         EndCase();
                         break;
                     case 4:
-                        RegistreerGebruiker(gebruikers);
+                        string naam;
+                        Console.Write("Voer de naam van de nieuwe gebruiker in: ");
+                        user = Console.ReadLine();
+                        gebruikers = RegistreerGebruiker( gebruikers, user);
                         EndCase();
                         break;
                     case 5:
-                        LenenBoek(ref boekTitels, ref tijdschriftNamen, ref lenenBoek, ref lenentijdschriftNamen);
-                        EndCase();
+                        if (!logged)
+                        {
+                            //Console.WriteLine(user);
+                            logged = CheckUser(gebruikers, logged, user);
+                        }
+                        else
+                        {
+                            LenenBoek(ref boekTitels, ref tijdschriftNamen, ref lenenBoek, ref lenentijdschriftNamen, ref user);
+                            EndCase();
+                        }
                         break;
                     case 6:
-                        TerugbrengenMateriaal(ref boekTitels, ref tijdschriftNamen, ref lenenBoek, ref lenentijdschriftNamen);
-                        EndCase();
+                        if (!logged)
+                        {
+                            logged = CheckUser(gebruikers, logged, user);
+                        }
+                        else
+                        {
+                            TerugbrengenMateriaal(ref boekTitels, ref tijdschriftNamen, ref lenenBoek, ref lenentijdschriftNamen, ref user);
+                            EndCase();
+                        }
                         break;
 
                     case 7:
@@ -400,8 +457,29 @@ namespace BibliotheekBeheerSysteem
                         break;
                 }
 
+                Console.Clear();
             } while (true);
+
             
+
+        }
+
+        private static bool CheckUser(string[] gebruikers, bool logged, string user)
+        {
+            Console.Write("Je moet eerst inloggen ==> Login : ");
+            string naam = Console.ReadLine();
+            if (gebruikers.Contains(naam))
+            {
+                Console.WriteLine($"Welcome : {naam} nu bent u ingelogd in het systeem ");
+                user = naam;
+                logged = true;
+            }
+            else
+            {
+                Console.WriteLine($"De gebruiker {naam} bestaat niet, Gebruik optie 4 om een ​​nieuwe gebruiker aan te maken.");
+            }
+
+            return logged;
         }
 
         private static void EndCase()
